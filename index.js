@@ -2,21 +2,25 @@ let classes = ['red', 'green', 'blue', 'yellow', 'black', 'pink', 'orange', 'pur
 
 let blocks = [];
 let showBlocks =[];
+let filterColors = [];
+let filterList = [];
+
 
 let body = document.querySelector('body');
-
-function createElement(teg, id) {
-    let elem = document.createElement(teg);
-    return elem
-}
-
-function addElement(place, elem) {
-    place.appendChild(elem)
-}
 
 let button = createElement('button');
 button.innerHTML = 'Создать';
 button.addEventListener('click', start);
+
+function start() {
+    blocksContainer.innerHTML = '';
+    blocks = [];
+    showBlocks = [];
+    addColors();
+    showDiws(showBlocks);
+    createSearch();
+    createSearchButton();
+}
 
 addElement(body, button);
 
@@ -46,27 +50,23 @@ function showDiws(arr) {
         addElement(blocksContainer, elem);
     })
 }
+// ------------------------------- Search ---------------------
 
 function createSearch() {
-    removeAllSearch();
-    
+    removeAllSearch('container');
+    removeAllSearch('searchContainer');
+    removeAllSearch('searchButton');
+
     let searchContainer = createElement('div');
-    searchContainer.classList.add('searchContainer')
+    searchContainer.classList.add('container')
     addElement(body, searchContainer);
-
     addNewSearch(searchContainer);
-
 }
 
-function removeAllSearch() {
-    let listContainers = document.querySelectorAll('.searchContainer');
+function removeAllSearch(className) {
+    let listContainers = document.querySelectorAll(`.${className}`);
     listContainers.forEach(container => {
         container.remove();
-    })
-
-    let listBtnsSearch = document.querySelectorAll('.searchButton');
-    listBtnsSearch.forEach(btn => {
-        btn.remove();
     })
 }
 
@@ -79,6 +79,8 @@ function addNewSearch(container) {
     let searchInput = createElement('input');
     searchInput.type = 'text';
     searchInput.placeholder = 'Введите цвет';
+    searchInput.id = `searchInput-${Math.random()}`
+
     addElement(searchContainer, searchInput);
 
     let btnAddFilter = createElement('button');
@@ -87,6 +89,8 @@ function addNewSearch(container) {
         addNewSearch(container)
     })
     addElement(searchContainer, btnAddFilter);
+
+    createRadio(searchInput.id, searchContainer, searchInput);
 }
 
 function createSearchButton() {
@@ -95,16 +99,8 @@ function createSearchButton() {
     searchButton.innerHTML = 'Отфильтровать';
     searchButton.addEventListener('click', search);
     addElement(body, searchButton);
-}
-
-function start() {
-    blocksContainer.innerHTML = '';
-    blocks = [];
-    showBlocks = [];
-    addColors();
-    showDiws(showBlocks);
-    createSearch();
-    createSearchButton();
+    searchButton.addEventListener('click', showRadio);
+    
 }
 
 function search() {
@@ -124,9 +120,100 @@ function search() {
                 showBlocks.push(color)
             }
         })
+        filterColors = [... showBlocks];
     })
 
-    console.log(showBlocks)
-    
     showDiws(showBlocks)
+}
+
+// -------------------------- Radio Filter-------------------
+
+function createRadio(inputId, container, input) {
+    let radioContainer = createElement('div');
+    radioContainer.classList.add('radioContainer');
+    addElement(container, radioContainer);
+
+    let radio = createElement('input');
+    radio.type = 'radio';
+    radio.name = `radio-${inputId}`;
+    radio.dataSet = 'showColor';
+    radio.checked = true;
+    radio.classList.add('radio');
+    radio.addEventListener('change', ()=> {
+        checkRadio(radio, input)
+    });
+
+    let label = createElement('label');
+    label.for = radio;
+    label.innerHTML = 'Включая цвет';
+    addElement(radioContainer, label)
+    addElement(radioContainer, radio);
+
+    let radio2 = createElement('input');
+    radio2.type = 'radio';
+    radio2.name = `radio-${inputId}`;
+    radio2.dataSet = 'dontShowColor';
+    radio2.classList.add('radio');
+    radio2.addEventListener('change', ()=> {
+        checkRadio(radio2, input)
+    });
+
+    let label2 = createElement('label');
+    label2.for = radio2;
+    label2.innerHTML = 'Исключая цвет';
+
+    addElement(radioContainer, label2)
+    addElement(radioContainer, radio2)
+
+}
+
+function showRadio() {
+    let radioBtns = document.querySelectorAll('.radioContainer');
+    
+    radioBtns.forEach(radio => {
+        radio.classList.add('show')
+    })
+}
+
+function checkRadio(radio, input) {
+    let color = input.value;
+    let localFilter = [];
+    blocksContainer.innerHTML = '';
+
+    if (radio.dataSet === 'dontShowColor') {
+       filterList.push(color);
+    }
+    if (radio.dataSet === 'showColor') {
+        let arr = [];
+
+        filterList.forEach(filterColor => {
+            if (filterColor !== color) {
+                arr.push(filterColor)
+            }
+        })
+
+        filterList = [... arr];
+    }
+
+    showBlocks.filter(block => {
+        if (filterList.includes(block) === false) {
+            localFilter.push(block)
+        }
+    })
+
+    filterColors = [... localFilter];
+
+    showDiws(filterColors)
+
+}
+
+//  ----------------------- Supportive ------------------
+
+function createElement(teg, id) {
+    let elem = document.createElement(teg);
+    return elem
+}
+
+function addElement(place, elem) {
+    place.appendChild(elem)
 }
