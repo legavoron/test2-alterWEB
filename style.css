@@ -1,0 +1,83 @@
+body {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.blocksContainer {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+input {
+    width: 160px;
+    outline: none;
+    font-size: 13px;
+	padding: 6px 0 4px 10px;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 8px;
+    margin-right:  5px;
+}
+
+input:last-child {
+    margin-right: 0px;
+}
+
+button {
+    height: 20px;
+    font-size: 13px;
+	border: 1px solid #cecece;
+	background: #6bb7ea;
+	border-radius: 5px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+button:active {
+    background-color: #aed7f2;
+}
+
+.block {
+    width: 50px;
+    height: 50px;
+    margin: 10px 5px;
+    border-radius: 5px;
+}
+
+.searchContainer {
+    margin: 20px 5px;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: green;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.black {
+    background-color: black;
+}
+
+.pink {
+    background-color: pink;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.purple {
+    background-color: purple;
+}
