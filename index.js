@@ -120,10 +120,21 @@ function search() {
                 showBlocks.push(color)
             }
         })
-        filterColors = [... showBlocks];
+
+        let localFilter = [];
+
+        showBlocks.forEach(block => {
+            if (filterList.includes(block) === false) {
+                localFilter.push(block)
+            }
+        });
+
+        filterColors = [... localFilter];
     })
 
-    showDiws(showBlocks)
+    
+
+    showDiws(filterColors)
 }
 
 // -------------------------- Radio Filter-------------------
